@@ -58,22 +58,36 @@
         title='hub logo' />
     </a>
   <div id="operated-by">
-      {%- if custom.operated_by.custom_html %}
-      Operated by: {{ custom.operated_by.custom_html | safe }} |
+      {%- if custom.operated_by.custom_html %} 
+      Operated by {{ custom.operated_by.custom_html | safe }} | 
+      {%- else %} 
+      Operated by <a href="{{ custom.operated_by.url }}" class="text-decoration-none">{{ custom.operated_by.name }}</a> | 
+      {%- endif %} 
+      {# Re-usable macro for funder details #} 
+      {%- macro funder_details(funded_by) %} 
+      {%- if funded_by.custom_html %} 
+      {{ funded_by.custom_html | safe }}
       {%- else %}
-      Operated by: <a href="{{ custom.operated_by.url }}" class="text-decoration-none">{{ custom.operated_by.name }}</a> |
-      {%- endif %}
-
-      {%- if custom.funded_by.custom_html %}
-      Funded by: {{ custom.funded_by.custom_html | safe }} |
-      {%- else %}
-      Funded by: <a href="{{ custom.funded_by.url }}" class="text-decoration-none">{{ custom.funded_by.name }}</a> |
-      {%- endif %}
-
+      <a href="{{ funded_by.url }}" class="text-decoration-none">{{ funded_by.name }}</a>
+      {%- endif %} 
+      {%- endmacro %}
+      {%- if custom.funded_by is mapping %} 
+      {#- Single mapping for funders #} 
+      Funded by {{ funder_details(custom.funded_by) }} | 
+      {%- elif custom.funded_by is sequence %} 
+      {#- Sequence of mapping for funders #}
+      Funded by
+      <ul class="funded-by-list">
+        {%- for funded_by in custom.funded_by %}
+        <li>{{ funder_details(funded_by) }}</li>
+        {%- endfor %}
+      </ul>
+      | {%- endif %} 
       {%- if custom.designed_by.custom_html %}
-      Designed by: {{ custom.designed_by.custom_html | safe }}
+      Designed by {{ custom.designed_by.custom_html | safe }} 
       {%- else %}
-      Designed by: <a href="{{ custom.designed_by.url }}" class="text-decoration-none">{{ custom.designed_by.name }}</a>
+      Designed by 
+      <a href="{{ custom.designed_by.url }}" class="text-decoration-none">{{ custom.designed_by.name }}</a>
       {%- endif %}
   </div>
   </div>

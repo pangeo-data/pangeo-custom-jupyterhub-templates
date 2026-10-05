@@ -88,3 +88,11 @@ p.hub-login-text {
 div.login-header img.hub-logo {
     width: 40%;
 }
+
+ul.funded-by-list {
+    display: inline-block; 
+    vertical-align:top; 
+    list-style:none; 
+    margin: 0 0; 
+    padding: 0 0
+}
